@@ -1,114 +1,132 @@
-# dataset-viewer MCP server
+# Dataset Viewer MCP Server
 
-MCP server for interacting with Hugging Face dataset viewer API, providing dataset browsing, filtering, and statistics capabilities
+An MCP server for interacting with the [Hugging Face Dataset Viewer API](https://huggingface.co/docs/dataset-viewer), providing capabilities to browse and analyze datasets hosted on the Hugging Face Hub.
 
-## Components
+## Features
 
 ### Resources
 
-The server implements a simple note storage system with:
-- Custom note:// URI scheme for accessing individual notes
-- Each note resource has a name, description and text/plain mimetype
-
-### Prompts
-
-The server provides a single prompt:
-- summarize-notes: Creates summaries of all stored notes
-  - Optional "style" argument to control detail level (brief/detailed)
-  - Generates prompt combining all current notes with style preference
+- Uses `dataset://` URI scheme for accessing Hugging Face datasets
+- Supports dataset configurations and splits
+- Provides paginated access to dataset contents
 
 ### Tools
 
-The server implements one tool:
-- add-note: Adds a new note to the server
-  - Takes "name" and "content" as required string arguments
-  - Updates server state and notifies clients of resource changes
+The server provides three main tools:
+
+1. **list_splits**
+   - Lists available configurations and splits for a dataset
+   - Required parameters:
+     - `dataset_id`: Dataset identifier on Hugging Face Hub (e.g. 'username/dataset-name')
+
+2. **view_dataset**
+   - View paginated contents of a dataset
+   - Required parameters:
+     - `dataset_id`: Dataset identifier on Hugging Face Hub
+     - `config`: Dataset configuration name (e.g. 'default')
+     - `split`: Dataset split name (e.g. 'train', 'test')
+   - Optional parameters:
+     - `page`: Page number (0-based)
+
+3. **get_stats**
+   - Get statistics about a dataset
+   - Required parameters:
+     - `dataset_id`: Dataset identifier on Hugging Face Hub
+     - `config`: Dataset configuration name
+     - `split`: Dataset split name
+
+## Installation
+
+### Prerequisites
+
+- Python 3.12 or higher
+- [uv](https://github.com/astral-sh/uv) - Fast Python package installer and resolver
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/privetin/dataset-viewer.git
+cd dataset-viewer
+```
+
+2. Create a virtual environment and install:
+```bash
+# Create virtual environment
+uv venv
+
+# Activate virtual environment
+# On Unix:
+source .venv/bin/activate
+# On Windows:
+.venv\Scripts\activate
+
+# Install in development mode
+uv add -e .
+```
 
 ## Configuration
 
-[TODO: Add configuration details specific to your implementation]
+### Claude Desktop Integration
 
-## Quickstart
+Add the following to your Claude Desktop config file:
 
-### Install
+On Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
-#### Claude Desktop
+On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
-On MacOS: `~/Library/Application\ Support/Claude/claude_desktop_config.json`
-
-On Windows: `C:\Users\<username>\AppData\Roaming\Claude\claude_desktop_config.json`
-
-<details>
-  <summary>Development/Unpublished Servers Configuration</summary>
-
-  ```
+```json
+{
   "mcpServers": {
     "dataset-viewer": {
       "command": "uv",
       "args": [
-        "--directory",
-        "C:\MCP\server\community\dataset-viewer",
         "run",
         "dataset-viewer"
       ]
     }
   }
-  ```
-</details>
-
-<details>
-  <summary>Published Servers Configuration</summary>
-
-  ```
-  "mcpServers": {
-    "dataset-viewer": {
-      "command": "uvx",
-      "args": [
-        "dataset-viewer"
-      ]
-    }
-  }
-  ```
-</details>
-
-## Development
-
-### Building and Publishing
-
-To prepare the package for distribution:
-
-1. Sync dependencies and update lockfile:
-```bash
-uv sync
+}
 ```
 
-2. Build package distributions:
-```bash
-uv build
+## Usage Examples
+
+1. List available splits for a dataset:
+```json
+{
+  "dataset_id": "cornell-movie-review-data/rotten_tomatoes"
+}
 ```
 
-This will create source and wheel distributions in the `dist/` directory.
-
-3. Publish to PyPI:
-```bash
-uv publish
+2. View dataset contents:
+```json
+{
+  "dataset_id": "cornell-movie-review-data/rotten_tomatoes",
+  "config": "default",
+  "split": "train",
+  "page": 0
+}
 ```
 
-Note: You'll need to set PyPI credentials via environment variables or command flags:
-- Token: `--token` or `UV_PUBLISH_TOKEN`
-- Or username/password: `--username`/`UV_PUBLISH_USERNAME` and `--password`/`UV_PUBLISH_PASSWORD`
-
-### Debugging
-
-Since MCP servers run over stdio, debugging can be challenging. For the best debugging
-experience, we strongly recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
-
-
-You can launch the MCP Inspector via [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) with this command:
-
-```bash
-npx @modelcontextprotocol/inspector uv --directory C:\MCP\server\community\dataset-viewer run dataset-viewer
+3. Get dataset statistics:
+```json
+{
+  "dataset_id": "cornell-movie-review-data/rotten_tomatoes",
+  "config": "default",
+  "split": "train"
+}
 ```
 
+## Limitations
 
-Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging.
+- Only works with datasets hosted on the Hugging Face Hub
+- Maximum page size of 100 rows when viewing dataset contents
+- Requires dataset name to be in format 'username/dataset-name'
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[Add appropriate license]
