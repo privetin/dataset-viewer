@@ -1,0 +1,17 @@
+[project]
+name = "dataset-viewer"
+version = "0.1.0"
+description = "MCP server for interacting with Hugging Face dataset viewer API, providing dataset browsing, filtering, and statistics capabilities"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [ "mcp>=1.1.2",]
+[[project.authors]]
+name = "privetin"
+email = "81558906+privetin@users.noreply.github.com"
+
+[build-system]
+requires = [ "hatchling",]
+build-backend = "hatchling.build"
+
+[project.scripts]
+dataset-viewer = "dataset_viewer:main"
