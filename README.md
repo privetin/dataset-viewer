@@ -9,31 +9,76 @@ An MCP server for interacting with the [Hugging Face Dataset Viewer API](https:/
 - Uses `dataset://` URI scheme for accessing Hugging Face datasets
 - Supports dataset configurations and splits
 - Provides paginated access to dataset contents
+- Handles authentication for private datasets
+- Supports searching and filtering dataset contents
+- Provides dataset statistics and analysis
 
 ### Tools
 
-The server provides three main tools:
+The server provides the following tools:
 
-1. **list_splits**
-   - Lists available configurations and splits for a dataset
-   - Required parameters:
-     - `dataset_id`: Dataset identifier on Hugging Face Hub (e.g. 'username/dataset-name')
+1. **validate**
+   - Check if a dataset exists and is accessible
+   - Parameters:
+     - `dataset`: Dataset identifier (e.g. 'stanfordnlp/imdb')
+     - `auth_token` (optional): For private datasets
 
-2. **view_dataset**
-   - View paginated contents of a dataset
-   - Required parameters:
-     - `dataset_id`: Dataset identifier on Hugging Face Hub
-     - `config`: Dataset configuration name (e.g. 'default')
-     - `split`: Dataset split name (e.g. 'train', 'test')
-   - Optional parameters:
-     - `page`: Page number (0-based)
+2. **get_info**
+   - Get detailed information about a dataset
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `auth_token` (optional): For private datasets
 
-3. **get_stats**
-   - Get statistics about a dataset
-   - Required parameters:
-     - `dataset_id`: Dataset identifier on Hugging Face Hub
-     - `config`: Dataset configuration name
-     - `split`: Dataset split name
+3. **get_rows**
+   - Get paginated contents of a dataset
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `config`: Configuration name
+     - `split`: Split name
+     - `page` (optional): Page number (0-based)
+     - `auth_token` (optional): For private datasets
+
+4. **get_first_rows**
+   - Get first rows from a dataset split
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `config`: Configuration name
+     - `split`: Split name
+     - `auth_token` (optional): For private datasets
+
+5. **get_statistics**
+   - Get statistics about a dataset split
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `config`: Configuration name
+     - `split`: Split name
+     - `auth_token` (optional): For private datasets
+
+6. **search_dataset**
+   - Search for text within a dataset
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `config`: Configuration name
+     - `split`: Split name
+     - `query`: Text to search for
+     - `auth_token` (optional): For private datasets
+
+7. **filter**
+   - Filter rows using SQL-like conditions
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `config`: Configuration name
+     - `split`: Split name
+     - `where`: SQL WHERE clause (e.g. "score > 0.5")
+     - `orderby` (optional): SQL ORDER BY clause
+     - `page` (optional): Page number (0-based)
+     - `auth_token` (optional): For private datasets
+
+8. **get_parquet**
+   - Download entire dataset in Parquet format
+   - Parameters:
+     - `dataset`: Dataset identifier
+     - `auth_token` (optional): For private datasets
 
 ## Installation
 
@@ -67,6 +112,10 @@ uv add -e .
 
 ## Configuration
 
+### Environment Variables
+
+- `HUGGINGFACE_TOKEN`: Your Hugging Face API token for accessing private datasets
+
 ### Claude Desktop Integration
 
 Add the following to your Claude Desktop config file:
@@ -91,42 +140,51 @@ On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ## Usage Examples
 
-1. List available splits for a dataset:
+1. Validate a dataset:
 ```json
 {
-  "dataset_id": "cornell-movie-review-data/rotten_tomatoes"
+  "dataset": "stanfordnlp/imdb"
 }
 ```
 
-2. View dataset contents:
+2. Get dataset information:
 ```json
 {
-  "dataset_id": "cornell-movie-review-data/rotten_tomatoes",
-  "config": "default",
+  "dataset": "stanfordnlp/imdb"
+}
+```
+
+3. Search dataset contents:
+```json
+{
+  "dataset": "stanfordnlp/imdb",
+  "config": "plain_text",
   "split": "train",
+  "query": "great movie"
+}
+```
+
+4. Filter and sort rows:
+```json
+{
+  "dataset": "stanfordnlp/imdb",
+  "config": "plain_text",
+  "split": "train",
+  "where": "label = 'positive'",
+  "orderby": "text DESC",
   "page": 0
 }
 ```
 
-3. Get dataset statistics:
+5. Get dataset statistics:
 ```json
 {
-  "dataset_id": "cornell-movie-review-data/rotten_tomatoes",
-  "config": "default",
+  "dataset": "stanfordnlp/imdb",
+  "config": "plain_text",
   "split": "train"
 }
 ```
 
-## Limitations
-
-- Only works with datasets hosted on the Hugging Face Hub
-- Maximum page size of 100 rows when viewing dataset contents
-- Requires dataset name to be in format 'username/dataset-name'
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
-[Add appropriate license]
+MIT License - see [LICENSE](LICENSE) for details
