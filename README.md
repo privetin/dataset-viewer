@@ -1,4 +1,5 @@
 # Dataset Viewer MCP Server
+[![smithery badge](https://smithery.ai/badge/dataset-viewer)](https://smithery.ai/server/dataset-viewer)
 
 An MCP server for interacting with the [Hugging Face Dataset Viewer API](https://huggingface.co/docs/dataset-viewer), providing capabilities to browse and analyze datasets hosted on the Hugging Face Hub.
 
@@ -81,6 +82,14 @@ The server provides the following tools:
      - `auth_token` (optional): For private datasets
 
 ## Installation
+
+### Installing via Smithery
+
+To install dataset-viewer for Claude Desktop automatically via [Smithery](https://smithery.ai/server/dataset-viewer):
+
+```bash
+npx -y @smithery/cli install dataset-viewer --client claude
+```
 
 ### Prerequisites
 
