@@ -1,5 +1,7 @@
 # Dataset Viewer MCP Server
 
+[![smithery badge](https://smithery.ai/badge/dataset-viewer)](https://smithery.ai/server/dataset-viewer)
+
 An MCP server for interacting with the [Hugging Face Dataset Viewer API](https://huggingface.co/docs/dataset-viewer), providing capabilities to browse and analyze datasets hosted on the Hugging Face Hub.
 
 ## Features
@@ -86,6 +88,14 @@ The server provides the following tools:
 
 - Python 3.12 or higher
 - [uv](https://github.com/astral-sh/uv) - Fast Python package installer and resolver
+
+### Installing via Smithery
+
+To install Dataset Viewer for Claude Desktop automatically via [Smithery](https://smithery.ai/server/dataset-viewer):
+
+```bash
+npx -y @smithery/cli install dataset-viewer --client claude
+```
 
 ### Setup
 
