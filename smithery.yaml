@@ -1,0 +1,17 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - huggingfaceToken
+    properties:
+      huggingfaceToken:
+        type: string
+        description: Your Hugging Face API token for accessing private datasets.
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'uv', args: ['run', 'dataset-viewer'], env: { HUGGINGFACE_TOKEN: config.huggingfaceToken } })
