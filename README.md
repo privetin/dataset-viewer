@@ -2,6 +2,10 @@
 
 An MCP server for interacting with the [Hugging Face Dataset Viewer API](https://huggingface.co/docs/dataset-viewer), providing capabilities to browse and analyze datasets hosted on the Hugging Face Hub.
 
+<a href="https://glama.ai/mcp/servers/b5mmrmnn6b">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/b5mmrmnn6b/badge" alt="Dataset Viewer Server MCP server" />
+</a>
+
 ## Features
 
 ### Resources
